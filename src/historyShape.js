@@ -12,19 +12,22 @@
  * the License.
  */
 
-import { wizardShape } from '../src';
+import PropTypes from "prop-types";
 
-jest.mock('prop-types', () => ({
-  shape: shape => ({ isRequired: shape }),
-  arrayOf: item => ({ isRequired: item }),
-  func: { isRequired: 'squawk' },
-  object: { isRequired: 'squawk' },
-  string: { isRequired: 'squawk' },
-  node: { isRequired: 'squawk' },
-}));
+const location = PropTypes.shape({
+  hash: PropTypes.string,
+  key: PropTypes.string,
+  pathname: PropTypes.string,
+  search: PropTypes.string,
+  state: PropTypes.shape({})
+});
 
-describe('wizardShape', () => {
-  it('exports the correct shape', () => {
-    expect(wizardShape).toMatchSnapshot();
-  });
+export default PropTypes.shape({
+  location,
+  entries: PropTypes.arrayOf(location),
+  go: PropTypes.func,
+  goBack: PropTypes.func,
+  listen: PropTypes.func,
+  push: PropTypes.func,
+  replace: PropTypes.func
 });

@@ -12,19 +12,19 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
-import renderCallback from '../utils/renderCallback';
+import historyShape from "../src/historyShape";
 
-const createWizardComponent = name => {
-  const WizardComponent = (props, { wizard: { init, ...wizard } }) => renderCallback(props, wizard);
+jest.mock("prop-types", () => ({
+  shape: shape => ({ isRequired: shape }),
+  arrayOf: item => ({ isRequired: item }),
+  func: { isRequired: "squawk" },
+  object: { isRequired: "squawk" },
+  string: { isRequired: "squawk" },
+  node: { isRequired: "squawk" }
+}));
 
-  WizardComponent.contextTypes = {
-    wizard: PropTypes.object,
-  };
-
-  WizardComponent.displayName = name;
-
-  return WizardComponent;
-};
-
-export default createWizardComponent;
+describe("historyShape", () => {
+  it("exports the correct shape", () => {
+    expect(historyShape).toMatchSnapshot();
+  });
+});

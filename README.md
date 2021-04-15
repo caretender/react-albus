@@ -24,34 +24,31 @@ import { Wizard, Steps, Step } from 'react-albus';
 const Example = () => (
   <Wizard>
     <Steps>
-      <Step
-        id="merlin"
-        render={({ next }) => (
+      <Step id="merlin">
+        {({ next }) => (
           <div>
             <h1>Merlin</h1>
             <button onClick={next}>Next</button>
           </div>
         )}
-      />
-      <Step
-        id="gandalf"
-        render={({ next, previous }) => (
+      </Step>
+      <Step id="gandalf">
+        {({ next, previous }) => (
           <div>
             <h1>Gandalf</h1>
             <button onClick={next}>Next</button>
             <button onClick={previous}>Previous</button>
           </div>
         )}
-      />
-      <Step
-        id="dumbledore"
-        render={({ previous }) => (
+      </Step>
+      <Step id="dumbledore">
+        {({ previous }) => (
           <div>
             <h1>Dumbledore</h1>
             <button onClick={previous}>Previous</button>
           </div>
         )}
-      />
+      </Step>
     </Steps>
   </Wizard>
 );
@@ -67,8 +64,7 @@ Check out the [demo page](https://americanexpress.io/react-albus)!
 - [`<Wizard>`](#wizard)
 - [`<Steps>`](#steps)
 - [`<Step>`](#step)
-- [`withWizard`](#withwizard)
-- [`wizardShape`](#wizardShape)
+- [`useWizard`](#usewizard)
 - [`context.wizard`](#contextwizard)
 
 ---
@@ -76,20 +72,12 @@ Check out the [demo page](https://americanexpress.io/react-albus)!
 ### `<Wizard>`
 
 #### Props
+
 ##### `onNext(wizard)`: function *(optional)*
-A function that will be called by `<Wizard>` to determine the next step to proceed to.  An action must be taken within `onNext` to navigate to a `Step`.  To navigate to the next `Step`, use `push()`.
+A function that will be called by `<Wizard>` to determine the next step to proceed to.  It will be called with the [`context.wizard`](#contextwizard) object.  If you do not pass an `onNext` prop, `<Wizard>` will proceed directly to the next step.
 
-##### Params
-
-* `wizard` (object): The [`context.wizard`](#contextwizard) object.
-
-If you do not pass an `onNext` prop, `<Wizard>` will proceed directly to the next step.
-
-##### `render(wizard)`: function *(optional)*
-A function that will be used as the render function of `<Wizard>`.
-
-##### Params
-* `wizard` (object): The [`context.wizard`](#contextwizard) object.
+##### `children(wizard)`: function *(optional)*
+A [function as child](https://reactjs.org/docs/render-props.html#using-props-other-than-render) prop that will be used to render `<Wizard>`.   It will be called with the [`context.wizard`](#contextwizard) object.
 
 ---
 
@@ -97,6 +85,7 @@ A function that will be used as the render function of `<Wizard>`.
 Wraps all of the `<Step>` components in your journey.  The only direct children of `<Steps>` should be `<Step>` components.
 
 #### Props
+
 ##### `step`: object ***(optional)***
 An object describing the current step with the structure: `{ id: string }`.  Defining a `step` prop will make `<Steps>` a [controlled component](https://facebook.github.io/react/docs/forms.html).
 
@@ -114,12 +103,15 @@ Unique key for each step.
 
 In addition to `id`, any additional props added to `<Step>` will be available on each `step` object.  This can be used to add names, descriptions, or other metadata to each step.
 
-`<WithWizard>` is an alias for `<Step>` that can be used to access [`context.wizard`](#contextwizard) anywhere within the `<Wizard>` tree.
+##### `children(wizard)`: function *(optional)*
+A [function as child](https://reactjs.org/docs/render-props.html#using-props-other-than-render) prop that will be used to render `<Step>`.   It will be called with the [`context.wizard`](#contextwizard) object.
+
 
 ---
 
-### `withWizard()`
-A higher order component that adds [`context.wizard`](#contextwizard) as a `wizard  ` prop on the wrapped component.
+### `useWizard`
+
+The `useWizard` hook gives you access to the [`context.wizard`](#contextwizard) object anywhere within the `<Wizard>` tree.
 
 ---
 

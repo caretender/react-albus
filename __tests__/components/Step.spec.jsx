@@ -12,43 +12,38 @@
  * the License.
  */
 
-import React from 'react';
-import { shallow } from 'enzyme';
-import { Step } from '../../src';
+import React from "react";
+import { shallow } from "enzyme";
+import { Step } from "../../src";
 
-const context = { wizard: { drinkMore: 'butter beer' } };
+const mockWizard = { drinkMore: "butter beer" };
 
-describe('Step', () => {
-  it('should render children', () => {
+jest.mock("../../src/hooks/useWizard", () => jest.fn(() => mockWizard));
+
+describe("Step", () => {
+  it("should render children", () => {
     const rendered = shallow(
       <Step>
         <div />
-      </Step>,
-      { context }
+      </Step>
     );
 
     expect(rendered).toMatchSnapshot();
   });
 
-  it('should pass wizard to function as child', () => {
-    shallow(
+  it("should pass wizard to function as child", () => {
+    const rendered = shallow(
       <Step>
         {wizard => {
-          expect(wizard).toEqual(context.wizard);
+          return <h1>{wizard.drinkMore}</h1>;
         }}
-      </Step>,
-      { context }
+      </Step>
     );
+
+    expect(rendered.html()).toBe("<h1>butter beer</h1>");
   });
 
-  it('should pass wizard to render prop', () => {
-    shallow(
-      <Step
-        render={wizard => {
-          expect(wizard).toEqual(context.wizard);
-        }}
-      />,
-      { context }
-    );
+  it("should pass wizard to children function", () => {
+    shallow(<Step>{wizard => expect(wizard).toEqual(mockWizard)}</Step>);
   });
 });
